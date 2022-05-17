@@ -5,19 +5,35 @@
 Walker::Walker(int x, int y) 
 {
   vehicle = new Vehicle(x, y);
-  target = new Vector2D(0, 0);
+  target = new Target(300, 300);
+  steering = new Vector2D(0, 0);
+
+  d = 0.0f;
 }
 
 void Walker::update() 
 {
-  target = InputHandler::Instance()->getMousePosition();
-  vehicle->seek(target);
-  vehicle->checkEdges();
-  vehicle->update();
+	steering = vehicle->pursue(target);
+	vehicle->applyForce(steering);
+
+	d = dist(vehicle->getLocation(), target->getLocation());
+	if (d < vehicle->getR() + target->getR())
+	{
+		target = new Target(300, 300);
+		vehicle->setLocation(100, 100);
+	}
+	target->update();
+	vehicle->checkEdges();
+	vehicle->update();
+}
+
+float Walker::dist(Vector2D* location_a, Vector2D* location_b)
+{
+	return sqrt((location_b->getX() - location_a->getX()) * (location_b->getX() - location_a->getX()) + (location_b->getY() - location_a->getY()) * (location_b->getY() - location_a->getY()));
 }
 
 void Walker::draw(SDL_Renderer* renderer)
 {
-  filledCircleColor(renderer, target->getX(), target->getY(), 10, 0xFFFF0000);
-  vehicle->draw(renderer);
+	target->draw(renderer);
+	vehicle->draw(renderer);
 }

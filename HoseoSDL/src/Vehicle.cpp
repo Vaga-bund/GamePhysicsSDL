@@ -17,7 +17,7 @@ Vehicle::Vehicle(float x, float y)
   tr_xy3 = new Vector2D(0, 0);
 }
 
-void Vehicle::seek(Vector2D* target)
+Vector2D* Vehicle::seek(Vector2D* target)
 {
   *force = *target - *location;
   //setMag(maxSpeed)
@@ -27,7 +27,29 @@ void Vehicle::seek(Vector2D* target)
   *force -= *velocity;
   force->limit(maxForce);
 
-  applyForce(force);
+  return force;
+}
+
+Vector2D* Vehicle::evade(Vehicle* vehicle)
+{
+    Vector2D* pursuit = pursue(vehicle);
+    *pursuit *= -1;
+    return pursuit;
+}
+Vector2D* Vehicle::pursue(Vehicle* vehicle)
+{
+    Vector2D* target = vehicle->getLocation();
+    Vector2D* prediction = vehicle->getVelocity();
+    *prediction *= 20.0f;
+    *target += *prediction;
+
+    return seek(target);
+}
+Vector2D* Vehicle::flee(Vector2D* target)
+{
+    target = seek(target);
+    *target *= -1;
+    return target;
 }
 
 void Vehicle::applyForce(Vector2D* Force)
