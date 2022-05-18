@@ -12,6 +12,9 @@ protected:
 	Vector2D* acceleration;
 	Vector2D* force;
 
+	Vector2D* target;
+	Vector2D* prediction;
+
 	Vector2D* tr_xy1;
 	Vector2D* tr_xy2;
 	Vector2D* tr_xy3;

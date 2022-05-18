@@ -7,6 +7,8 @@ Vehicle::Vehicle(float x, float y)
   acceleration = new Vector2D(0.0f, 0.0f);
   //초기화
   force = new Vector2D(0.0f, 0.0f);
+  target = new Vector2D(0.0f, 0.0f);
+  prediction = new Vector2D(0.0f, 0.0f);
   
   maxSpeed = 4.0f;
   maxForce = 0.25f;
@@ -38,9 +40,9 @@ Vector2D* Vehicle::evade(Vehicle* vehicle)
 }
 Vector2D* Vehicle::pursue(Vehicle* vehicle)
 {
-    Vector2D* target = vehicle->getLocation();
-    Vector2D* prediction = vehicle->getVelocity();
-    *prediction *= 20.0f;
+    target = vehicle->getLocation();
+    prediction = vehicle->getVelocity();
+    *prediction *= 2.0f;
     *target += *prediction;
 
     return seek(target);

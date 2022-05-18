@@ -1,13 +1,18 @@
 #include "Walker.h"
 #include "InputHandler.h"
 #include <random>
+#include <iostream>
+
+std::random_device rd;
+std::mt19937 gen(rd());
+std::uniform_real_distribution<float> dis_width(0, 600);
+std::uniform_real_distribution<float> dis_height(0, 400);
 
 Walker::Walker(int x, int y) 
 {
-  vehicle = new Vehicle(x, y);
-  target = new Target(300, 300);
+  vehicle = new Vehicle(dis_width(gen), dis_height(gen));
+  target = new Target(dis_width(gen), dis_height(gen));
   steering = new Vector2D(0, 0);
-
   d = 0.0f;
 }
 
@@ -19,12 +24,13 @@ void Walker::update()
 	d = dist(vehicle->getLocation(), target->getLocation());
 	if (d < vehicle->getR() + target->getR())
 	{
-		target = new Target(300, 300);
-		vehicle->setLocation(100, 100);
+		target = new Target(dis_width(gen), dis_height(gen));
+		vehicle->setLocation(dis_width(gen), dis_height(gen));
 	}
-	target->update();
 	vehicle->checkEdges();
 	vehicle->update();
+	target->checkEdges();
+	target->update();
 }
 
 float Walker::dist(Vector2D* location_a, Vector2D* location_b)

@@ -1,15 +1,13 @@
 #include "include/Target.h"
+#include <stdio.h>
 
 Target::Target(float x, float y)
 {
 	location = new Vector2D(x, y);
-	velocity = new Vector2D(0.0f, 0.0f);
+	velocity = new Vector2D(1.0f, 1.0f);
 	acceleration = new Vector2D(0.0f, 0.0f);
 
-	velocity->setX(1.0f);
-	velocity->setY(1.0f);
-	maxSpeed = 4;
-	*velocity *= maxSpeed;
+	maxSpeed = 1;
 }
 
 void Target::checkEdges()
@@ -34,6 +32,14 @@ void Target::checkEdges()
 		velocity->setY(velocity->getY() * -1);
 		location->setY(r);
 	}
+}
+
+void Target::update()
+{
+	*velocity += *acceleration;
+	velocity->limit(maxSpeed);
+	*location += *velocity;
+	*acceleration *= 0;
 }
 
 void Target::draw(SDL_Renderer* renderer)
