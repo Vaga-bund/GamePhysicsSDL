@@ -1,10 +1,11 @@
 #include "include/Target.h"
+#include "include/InputHandler.h"
 #include <stdio.h>
 
 Target::Target(float x, float y)
 {
 	location = new Vector2D(x, y);
-	velocity = new Vector2D(1.0f, 1.0f);
+	velocity = new Vector2D(0.0f, 0.0f);
 	acceleration = new Vector2D(0.0f, 0.0f);
 
 	maxSpeed = 1;
@@ -36,10 +37,14 @@ void Target::checkEdges()
 
 void Target::update()
 {
+	/*
 	*velocity += *acceleration;
 	velocity->limit(maxSpeed);
 	*location += *velocity;
 	*acceleration *= 0;
+	*/
+	location = InputHandler::Instance()->getMousePosition();
+
 }
 
 void Target::draw(SDL_Renderer* renderer)

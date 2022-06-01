@@ -29,18 +29,25 @@ protected:
 public:
 	Vehicle() {}
 	Vehicle(float x, float y);
+
+	enum Deceleration { slow = 3, normal = 2, fast = 1 };
+
 	Vector2D* seek(Vector2D* target);
 	Vector2D* evade(Vehicle* vehicle);
 	Vector2D* pursue(Vehicle* vehicle);
 	Vector2D* flee(Vector2D* target);
+	Vector2D* arrive(Vector2D* TargetPos, Deceleration deceleration);
+	Vector2D rotation(float x, float y);
+
 	void applyForce(Vector2D* Force);
 	void checkEdges();
-	Vector2D rotation(float x, float y);
 	void update();
 	void draw(SDL_Renderer* renderer);
+
 	Vector2D* getLocation() { return location; }
 	Vector2D* getVelocity() { return velocity; }
 	float getR() { return r; }
+
 	void setLocation(float x, float y)
 	{ 
 		location->setX(x);

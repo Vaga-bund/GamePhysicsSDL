@@ -18,15 +18,18 @@ Walker::Walker(int x, int y)
 
 void Walker::update() 
 {
-	steering = vehicle->pursue(target);
+	steering = vehicle->arrive(target->getLocation(), vehicle->slow);
 	vehicle->applyForce(steering);
 
+	/*
 	d = dist(vehicle->getLocation(), target->getLocation());
 	if (d < vehicle->getR() + target->getR())
 	{
 		target = new Target(dis_width(gen), dis_height(gen));
 		vehicle->setLocation(dis_width(gen), dis_height(gen));
 	}
+	*/
+	printf("%f, %f\n", steering->getX(), steering->getY());
 	vehicle->checkEdges();
 	vehicle->update();
 	target->checkEdges();

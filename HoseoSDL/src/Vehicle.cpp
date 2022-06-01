@@ -1,4 +1,5 @@
 #include "Vehicle.h"
+#define min(x, y) (x) < (y) ? (x) : (y)
 
 Vehicle::Vehicle(float x, float y)
 {
@@ -10,7 +11,7 @@ Vehicle::Vehicle(float x, float y)
   target = new Vector2D(0.0f, 0.0f);
   prediction = new Vector2D(0.0f, 0.0f);
   
-  maxSpeed = 4.0f;
+  maxSpeed = 8.0f;
   maxForce = 0.25f;
   r = 16.0f;
   
@@ -52,6 +53,26 @@ Vector2D* Vehicle::flee(Vector2D* target)
     target = seek(target);
     *target *= -1;
     return target;
+}
+
+Vector2D* Vehicle::arrive(Vector2D* TargetPos, Deceleration deceleration)
+{
+    Vector2D ToTarget = *TargetPos - *location;
+
+    double dist = ToTarget.length();
+
+    if (dist > 0)
+    {
+        const double DecelerationTweaker = 3;
+        double speed = dist / ((double)deceleration * DecelerationTweaker);
+        speed = min(speed, maxSpeed);
+
+        Vector2D DesiredVelocity = ToTarget * speed / dist;
+
+        return new Vector2D (DesiredVelocity - *velocity);
+    }
+
+    return new Vector2D(0, 0);
 }
 
 void Vehicle::applyForce(Vector2D* Force)
